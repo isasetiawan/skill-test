@@ -1,0 +1,65 @@
+import React, { Component } from 'react';
+import {Segment, Form} from 'semantic-ui-react'
+
+class CreateUpdatePost extends Component {
+
+    constructor(props){
+        super(props)
+        this.state = {
+            title:"",
+            body:"",
+            userId:this.props.match.params.userId,
+            is_loading:false,
+            is_success:false
+        }
+
+        this.handleInputChange = this.handleInputChange.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
+    }
+
+    handleInputChange(event){
+        const target = event.target
+        const name = target.name
+        this.setState({
+            [name]:target.value
+        })
+    }
+
+    handleSubmit(event){
+        this.setState({is_loading:true})
+        this.setState({is_success:false})
+
+        let {title, body, userId} = this.state;
+        fetch('https://jsonplaceholder.typicode.com/posts', {
+                method: 'POST',
+                body: JSON.stringify({title, body, userId}),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+        .then(res=>{
+            if (res.status === 201) this.setState({is_success:true})
+            return res
+        })
+        .then(response => response.json())
+        .then(json => console.log(json))
+        .then(()=>this.setState({is_loading:false}))
+        event.preventDefault();
+    }
+
+
+    render(){
+        return(
+            <Segment>
+                <Form onSubmit={this.handleSubmit}>
+                    <Form.Input onChange={this.handleInputChange} name="title" label="Title" placeholder="Title"></Form.Input>
+                    <Form.TextArea onChange={this.handleInputChange} name="body" label='Post' placeholder='Post about what you think here' />
+                    <Form.Button primary loading={this.state.is_loading}>Submit</Form.Button>
+                    {this.state.is_success ? <p>Post Submitted</p> : <p></p>}
+                </Form>
+            </Segment>
+        )
+    }
+}
+
+export default CreateUpdatePost
