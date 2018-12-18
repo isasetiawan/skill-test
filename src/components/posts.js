@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Card, Feed} from 'semantic-ui-react'
+import {Link} from 'react-router-dom'
 
 class Posts extends Component {
 
@@ -8,17 +9,12 @@ class Posts extends Component {
         this.state = {
             posts : []
         }
-        this.selectPost = this.selectPost.bind(this)
     }
 
     componentDidMount(){
         fetch(`https://jsonplaceholder.typicode.com/users/${this.props.match.params.userId}/posts`)
         .then(res=>res.json())
         .then(posts => this.setState({posts}))
-    }
-
-    selectPost(id){
-        this.props.history.push(this.props.match.url+'/'+id)
     }
 
     render(){return(
@@ -29,9 +25,9 @@ class Posts extends Component {
             <Card.Content>
                 <Feed>
                     {this.state.posts.map(post=>
-                        <Feed.Event onClick={()=>this.selectPost(post.id)}>
+                        <Feed.Event>
                             <Feed.Content>
-                                <h3>{post.title}</h3>
+                                <h3><Link to={this.props.match.url+'/'+post.id}>{post.title}</Link></h3>
                                 <Feed.Summary>
                                     {post.body}
                                 </Feed.Summary>
