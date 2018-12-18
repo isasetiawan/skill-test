@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Card, Grid, Button, Feed } from 'semantic-ui-react';
+import { Card, Grid } from 'semantic-ui-react';
+import Posts from './posts';
 
 class User extends Component {
 
@@ -20,17 +21,20 @@ class User extends Component {
         let {user} = this.state
         if (user) {
             return(
-                <Grid>
-                    <Grid.Row>
+                <Grid columns='equal'>
+                    <Grid.Column>
                         <Card
                             header={`${user.name} (${user.username})`}
                             meta={user.email}
                             description={`Life in ${user.address.street}, ${user.address.suite}, ${user.address.city}, ${user.address.zipcode}. Work at ${user.company.name}`}
                             extra={user.website + " " + user.phone}
                         ></Card>
-                    </Grid.Row>
-                </Grid>
+                    </Grid.Column>
+                    <Grid.Column>
+                        <Posts {...this.props} ></Posts>
+                    </Grid.Column>
 
+                </Grid>
             )
         } else {
             return <h1>User not loaded</h1>
