@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { Card, Grid } from 'semantic-ui-react';
+import { Card, Grid, Button } from 'semantic-ui-react';
+import {Route} from 'react-router-dom'
 import Posts from './posts';
+import Post from './post';
+import Albums from './albums';
 
 class User extends Component {
 
@@ -9,6 +12,7 @@ class User extends Component {
         this.state = {
             user : null
         }
+        this.viewSomething = this.viewSomething.bind(this)
     }
 
     componentDidMount(){
@@ -17,21 +21,33 @@ class User extends Component {
         .then(user => this.setState({user}))
     }
 
+    viewSomething(path){
+        // console.log(this.props.match.url+'/'+path)
+        this.props.history.push(this.props.match.url+'/'+path)
+    }
+
     render(){
         let {user} = this.state
         if (user) {
             return(
                 <Grid columns='equal'>
-                    <Grid.Column>
+                    <Grid.Column width={5}>
                         <Card
+                            fluid
                             header={`${user.name} (${user.username})`}
                             meta={user.email}
                             description={`Life in ${user.address.street}, ${user.address.suite}, ${user.address.city}, ${user.address.zipcode}. Work at ${user.company.name}`}
                             extra={user.website + " " + user.phone}
                         ></Card>
+                        <Button content="View Posts" onClick={()=>this.viewSomething('posts')}></Button>
+                        <Button content="View Albums" onClick={()=>this.viewSomething('albums')}></Button>
+
                     </Grid.Column>
                     <Grid.Column>
-                        <Posts {...this.props} ></Posts>
+                        <Route path="/:userId/posts/" exact component={Posts} ></Route>
+                        <Route path="/:userId/posts/:postId" component={Post} ></Route>
+                        <Route path="/:userId/albums/" component={Albums} ></Route>
+
                     </Grid.Column>
 
                 </Grid>
