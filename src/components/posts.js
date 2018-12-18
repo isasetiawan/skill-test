@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Card, Feed} from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
+import CreateUpdatePost from './create-update-post';
 
 class Posts extends Component {
 
@@ -18,26 +19,29 @@ class Posts extends Component {
     }
 
     render(){return(
-        <Card fluid>
-            <Card.Content>
-                <Card.Header>Posts</Card.Header>
-            </Card.Content>
-            <Card.Content>
-                <Feed>
-                    {this.state.posts.map(post=>
-                        <Feed.Event>
-                            <Feed.Content>
-                                <h3><Link to={this.props.match.url+'/'+post.id}>{post.title}</Link></h3>
-                                <Feed.Summary>
-                                    {post.body}
-                                </Feed.Summary>
-                                <br></br>
-                            </Feed.Content>
-                        </Feed.Event>
-                    )}
-                </Feed>
-            </Card.Content>
-        </Card>
+        <div>
+            <CreateUpdatePost {...this.props} ></CreateUpdatePost>
+            <Card fluid>
+                <Card.Content>
+                    <Card.Header>Posts</Card.Header>
+                </Card.Content>
+                <Card.Content>
+                    <Feed>
+                        {this.state.posts.map(post=>
+                            <Feed.Event>
+                                <Feed.Content>
+                                    <h3><Link to={this.props.match.url+'/'+post.id}>{post.title}</Link></h3>
+                                    <Feed.Summary>
+                                        {post.body}
+                                    </Feed.Summary>
+                                    <br></br>
+                                </Feed.Content>
+                            </Feed.Event>
+                        )}
+                    </Feed>
+                </Card.Content>
+            </Card>
+        </div>
     )}
 }
 
