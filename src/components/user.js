@@ -39,8 +39,8 @@ class User extends Component {
                             description={`Life in ${user.address.street}, ${user.address.suite}, ${user.address.city}, ${user.address.zipcode}. Work at ${user.company.name}`}
                             extra={user.website + " " + user.phone}
                         ></Card>
-                        <Button content="View Posts" onClick={()=>this.viewSomething('posts')}></Button>
-                        <Button content="View Albums" onClick={()=>this.viewSomething('albums')}></Button>
+                        <Button content="Posts" onClick={()=>this.viewSomething('posts')}></Button>
+                        <Button content="Albums" onClick={()=>this.viewSomething('albums')}></Button>
 
                     </Grid.Column>
                     <Grid.Column>
