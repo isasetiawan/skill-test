@@ -4,6 +4,7 @@ import {Route} from 'react-router-dom'
 import Posts from './posts';
 import Post from './post';
 import Albums from './albums';
+import Album from './album';
 
 class User extends Component {
 
@@ -46,8 +47,8 @@ class User extends Component {
                     <Grid.Column>
                         <Route path="/:userId/posts/" exact component={Posts} ></Route>
                         <Route path="/:userId/posts/:postId" component={Post} ></Route>
-                        <Route path="/:userId/albums/" component={Albums} ></Route>
-
+                        <Route path="/:userId/albums/" exact component={Albums} ></Route>
+                        <Route path="/:userId/albums/:albumId" component={Album} ></Route>
                     </Grid.Column>
 
                 </Grid>
