@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Card, Feed, FeedSummary} from 'semantic-ui-react'
+import {Card, Feed} from 'semantic-ui-react'
 
 class Posts extends Component {
 
@@ -8,6 +8,7 @@ class Posts extends Component {
         this.state = {
             posts : []
         }
+        this.selectPost = this.selectPost.bind(this)
     }
 
     componentDidMount(){
@@ -16,15 +17,19 @@ class Posts extends Component {
         .then(posts => this.setState({posts}))
     }
 
+    selectPost(id){
+        this.props.history.push(this.props.match.url+'/'+id)
+    }
+
     render(){return(
-        <Card>
+        <Card fluid>
             <Card.Content>
                 <Card.Header>Posts</Card.Header>
             </Card.Content>
             <Card.Content>
                 <Feed>
                     {this.state.posts.map(post=>
-                        <Feed.Event>
+                        <Feed.Event onClick={()=>this.selectPost(post.id)}>
                             <Feed.Content>
                                 <h3>{post.title}</h3>
                                 <Feed.Summary>
