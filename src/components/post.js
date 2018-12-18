@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Card, Comment } from 'semantic-ui-react';
+import { Card, Comment, Button } from 'semantic-ui-react';
+import CreateUpdatePost from './create-update-post';
 
 class Post extends Component {
 
@@ -7,8 +8,15 @@ class Post extends Component {
         super(props)
         this.state = {
             post:null,
+            is_editting:false,
             comments:[]
         }
+
+        this.toggleEdit = this.toggleEdit.bind(this)
+    }
+
+    toggleEdit(){
+        this.setState({is_editting:!this.state.is_editting})
     }
 
     componentDidMount(){
@@ -22,29 +30,33 @@ class Post extends Component {
     }
 
     render(){
-        let {post, comments} = this.state
+        let {post, comments, is_editting} = this.state
         if (post){
             return(
-                <Card fluid>
-                    <Card.Content>
-                        <Card.Header>{post.title}</Card.Header>
-                        <Card.Description>{post.body}</Card.Description>
-                    </Card.Content>
-                    <Card.Content extra>
-                        <Comment.Group>
-                            {comments.map(comment=>
-                                <Comment>
-                                    <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/elliot.jpg' />
-                                    <Comment.Content>
-                                        <Comment.Author>{comment.name}</Comment.Author>
-                                        <Comment.Metadata>{comment.email}</Comment.Metadata>
-                                        <Comment.Text>{comment.body}</Comment.Text>
-                                    </Comment.Content>
-                                </Comment>
-                                )}
-                        </Comment.Group>
-                    </Card.Content>
-                </Card>
+                <div>
+                    {is_editting ? <CreateUpdatePost {...this.props} post={this.state.post} ></CreateUpdatePost> : null}
+                    <Card fluid>
+                        <Card.Content>
+                            <Card.Header>{post.title}</Card.Header>
+                            <Card.Description>{post.body}</Card.Description>
+                            <Button floated="right" onClick={this.toggleEdit}>Update</Button>
+                        </Card.Content>
+                        <Card.Content extra>
+                            <Comment.Group>
+                                {comments.map(comment=>
+                                    <Comment>
+                                        <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/elliot.jpg' />
+                                        <Comment.Content>
+                                            <Comment.Author>{comment.name}</Comment.Author>
+                                            <Comment.Metadata>{comment.email}</Comment.Metadata>
+                                            <Comment.Text>{comment.body}</Comment.Text>
+                                        </Comment.Content>
+                                    </Comment>
+                                    )}
+                            </Comment.Group>
+                        </Card.Content>
+                    </Card>
+                </div>
             )
         } else {
             return <h1>post not loaded</h1>

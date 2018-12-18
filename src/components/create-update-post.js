@@ -5,9 +5,9 @@ class CreateUpdatePost extends Component {
 
     constructor(props){
         super(props)
+
         this.state = {
-            title:"",
-            body:"",
+            ...props.post,
             userId:this.props.match.params.userId,
             is_loading:false,
             is_success:false
@@ -29,16 +29,16 @@ class CreateUpdatePost extends Component {
         this.setState({is_loading:true})
         this.setState({is_success:false})
 
-        let {title, body, userId} = this.state;
-        fetch('https://jsonplaceholder.typicode.com/posts', {
-                method: 'POST',
+        let {title, body, userId, id} = this.state;
+        fetch(`https://jsonplaceholder.typicode.com/posts/${id?id:''}`, {
+                method: id ? 'PUT' : 'POST',
                 body: JSON.stringify({title, body, userId}),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             }
         })
         .then(res=>{
-            if (res.status === 201) this.setState({is_success:true})
+            if (res.status >= 200) this.setState({is_success:true})
             return res
         })
         .then(response => response.json())
@@ -52,8 +52,8 @@ class CreateUpdatePost extends Component {
         return(
             <Segment>
                 <Form onSubmit={this.handleSubmit}>
-                    <Form.Input onChange={this.handleInputChange} name="title" label="Title" placeholder="Title"></Form.Input>
-                    <Form.TextArea onChange={this.handleInputChange} name="body" label='Post' placeholder='Post about what you think here' />
+                    <Form.Input value={this.state.title} onChange={this.handleInputChange} name="title" label="Title" placeholder="Title"></Form.Input>
+                    <Form.TextArea value={this.state.body} onChange={this.handleInputChange} name="body" label='Post' placeholder='Post about what you think here' />
                     <Form.Button primary loading={this.state.is_loading}>Submit</Form.Button>
                     {this.state.is_success ? <p>Post Submitted</p> : <p></p>}
                 </Form>
