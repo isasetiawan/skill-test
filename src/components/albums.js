@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import {Card, Feed} from 'semantic-ui-react'
+import {Card, List} from 'semantic-ui-react'
+import {Link} from 'react-router-dom'
 
 class Albums extends Component {
 
@@ -22,17 +23,17 @@ class Albums extends Component {
                 <Card.Header>Albums</Card.Header>
             </Card.Content>
             <Card.Content>
-                <Feed>
+                <List>
                     {this.state.albums.map(album=>
-                        <Feed.Event>
-                            <Feed.Content>
-                                <Feed.Summary>
-                                    {album.title}
-                                </Feed.Summary>
-                            </Feed.Content>
-                        </Feed.Event>
+                    <List.Item>
+                        <List.Content>
+                            <List.Header>
+                                <Link to={`${this.props.match.url}/${album.id}`}>{album.title}</Link>
+                            </List.Header>
+                        </List.Content>
+                    </List.Item>
                     )}
-                </Feed>
+                </List>
             </Card.Content>
         </Card>
     )}
