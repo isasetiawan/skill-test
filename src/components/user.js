@@ -47,6 +47,7 @@ class User extends Component {
                     <Grid.Column>
                         <Route path="/:userId/posts/" exact component={Posts} ></Route>
                         <Route path="/:userId/posts/:postId" component={Post} ></Route>
+
                         <Route path="/:userId/albums/" exact component={Albums} ></Route>
                         <Route path="/:userId/albums/:albumId" component={Album} ></Route>
                     </Grid.Column>
