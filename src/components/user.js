@@ -35,6 +35,7 @@ class User extends Component {
                     <Grid.Column width={5}>
                         <Card
                             fluid
+                            image='https://react.semantic-ui.com/images/avatar/large/daniel.jpg'
                             header={`${user.name} (${user.username})`}
                             meta={user.email}
                             description={`Life in ${user.address.street}, ${user.address.suite}, ${user.address.city}, ${user.address.zipcode}. Work at ${user.company.name}`}
@@ -55,7 +56,7 @@ class User extends Component {
                 </Grid>
             )
         } else {
-            return <h1>User not loaded</h1>
+            return <h1>Loading User...</h1>
         }
         
     }

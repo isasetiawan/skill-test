@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Comment, Button, Modal } from 'semantic-ui-react';
+import { Card, Comment, Button, Modal, Form } from 'semantic-ui-react';
 import CreateUpdatePost from './create-update-post';
 
 class Post extends Component {
@@ -75,6 +75,10 @@ class Post extends Component {
                                         </Comment.Content>
                                     </Comment>
                                     )}
+                                    <Form reply>
+                                        <Form.TextArea />
+                                        <Button content='Add Reply' labelPosition='left' icon='edit' primary />
+                                    </Form>
                             </Comment.Group>
                         </Card.Content>
                     </Card>
@@ -93,7 +97,7 @@ class Post extends Component {
                 </div>
             )
         } else {
-            return <h1>post not loaded</h1>
+            return <h1>Loading post...</h1>
         }
     }
 
