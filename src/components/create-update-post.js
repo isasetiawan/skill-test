@@ -38,7 +38,10 @@ class CreateUpdatePost extends Component {
             }
         })
         .then(res=>{
-            if (res.status >= 200) this.setState({is_success:true})
+            if (res.status >= 200) {
+                this.setState({is_success:true})
+                window.location.reload()
+            }
             return res
         })
         .then(response => response.json())
