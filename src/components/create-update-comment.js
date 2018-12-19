@@ -29,9 +29,10 @@ class CreateUpdateComment extends Component {
         })
         .then(res=>{
             if (res.status >= 200){
-                window.location.reload()
+                // window.location.reload()
+                if(this.props.reload) this.props.reload()
             }
-            this.setState({is_loading:true})
+            this.setState({is_loading:false})
             return res
         })
         .then(response => response.json())

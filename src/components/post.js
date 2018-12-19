@@ -14,9 +14,11 @@ class Post extends Component {
             comments:[],
             in_edit_comment:0,
             modal_message:'',
-            comment_id_want_to_delete:0
+            comment_id_want_to_delete:0,
+            is_loading: false
         }
-
+        this.loadComment = this.loadComment.bind(this)
+        this.loadPost = this.loadPost.bind(this)
         this.toggleEdit = this.toggleEdit.bind(this)
         this.deleteConfirm = this.deleteConfirm.bind(this)
         this.doDelete = this.doDelete.bind(this)
@@ -32,6 +34,7 @@ class Post extends Component {
     }
 
     doDelete(){
+        this.setState({is_loading:true})
         fetch(`https://jsonplaceholder.typicode.com/posts/${this.state.post.id}`, {
                 method: 'DELETE',
             headers: {
@@ -43,11 +46,13 @@ class Post extends Component {
                 this.setState({modal_is_open:false})
                 this.props.history.goBack()
             }
+            this.setState({is_loading:false})
             return res
         })
     }
 
     doDeleteComment(){
+        this.setState({is_loading:true})
         fetch(`https://jsonplaceholder.typicode.com/comments/${this.state.comment_id_want_to_delete}`, {
                 method: 'DELETE',
             headers: {
@@ -57,20 +62,29 @@ class Post extends Component {
         .then(res=>{
             if (res.status >= 200) {
                 this.setState({modal_is_open:false})
-                window.location.reload()
+                this.loadComment()
             }
+            this.setState({is_loading:false})
             return res
         })
     }
 
-    componentDidMount(){
+    loadPost(){
         fetch(`https://jsonplaceholder.typicode.com/posts/${this.props.match.params.postId}`) 
         .then(res=>res.json())
         .then(post => this.setState({post}))
+    }
 
+    loadComment(){
         fetch(`https://jsonplaceholder.typicode.com/posts/${this.props.match.params.postId}/comments`) 
         .then(res=>res.json())
         .then(comments => this.setState({comments}))
+        .then(()=>this.setState({in_edit_comment:0}))
+    }
+
+    componentDidMount(){
+        this.loadComment()
+        this.loadPost()
     }
 
     render(){
@@ -78,7 +92,7 @@ class Post extends Component {
         if (post){
             return(
                 <div>
-                    {is_editting ? <CreateUpdatePost {...this.props} post={this.state.post} ></CreateUpdatePost> : null}
+                    {is_editting ? <CreateUpdatePost {...this.props} post={this.state.post} reload={this.loadPost} ></CreateUpdatePost> : null}
                     <Card fluid>
                         <Card.Content>
                             <Card.Header>{post.title}</Card.Header>
@@ -103,11 +117,11 @@ class Post extends Component {
                                             </Comment.Content>
                                             {comment.id !== in_edit_comment ? null
                                                 :
-                                                <CreateUpdateComment {...this.props} comment={comment} />
+                                                <CreateUpdateComment reload={this.loadComment} {...this.props} comment={comment} />
                                             }
                                     </Comment>
                                     )}
-                                    <CreateUpdateComment {...this.props} />
+                                    <CreateUpdateComment reload={this.loadComment} {...this.props} />
                             </Comment.Group>
                         </Card.Content>
                     </Card>
@@ -117,7 +131,7 @@ class Post extends Component {
                         <Modal.Header>Do you want to delete this {this.state.modal_message} ?</Modal.Header>
                         <Modal.Actions>
                             <Button negative onClick={() => this.setState({modal_is_open:false})}>No</Button>
-                            <Button positive onClick={this.state.modal_message === "post" ? this.doDelete : () => this.doDeleteComment()} icon='checkmark' labelPosition='right' content='Yes' />
+                            <Button loading={this.state.is_loading} positive onClick={this.state.modal_message === "post" ? this.doDelete : this.doDeleteComment} icon='checkmark' labelPosition='right' content='Yes' />
                         </Modal.Actions>
                     </Modal>
                 </div>

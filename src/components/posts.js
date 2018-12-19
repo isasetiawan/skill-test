@@ -10,17 +10,22 @@ class Posts extends Component {
         this.state = {
             posts : []
         }
+        this.loadPosts = this.loadPosts.bind(this)
     }
 
-    componentDidMount(){
+    loadPosts(){
         fetch(`https://jsonplaceholder.typicode.com/users/${this.props.match.params.userId}/posts`)
         .then(res=>res.json())
         .then(posts => this.setState({posts}))
     }
 
+    componentDidMount(){
+        this.loadPosts()
+    }
+
     render(){return(
         <div>
-            <CreateUpdatePost {...this.props} ></CreateUpdatePost>
+            <CreateUpdatePost {...this.props} reload={this.loadPosts} ></CreateUpdatePost>
             <Card fluid>
                 <Card.Content>
                     <Card.Header>Posts</Card.Header>
